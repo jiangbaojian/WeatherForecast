@@ -30,22 +30,25 @@ if __name__ == '__main__':
                 time_list.append(str(year) + str(month))
     time_list = time_list[:-2]
     url_main = 'http://lishi.tianqi.com/tengzhou/'
-     header = {'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-              'Accept-Encoding': 'gzip, deflate',
-              'Accept-Language': 'zh,zh-TW;q=0.9,en-US;q=0.8,en;q=0.7,zh-CN;q=0.6',
-              'Cache-Control': 'max-age=0',
-              'Connection': 'keep-alive',
-              'Host': 'lishi.tianqi.com',
-              'Upgrade-Insecure-Requests': '1'}
+    headers = {
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+        'Accept-Encoding': 'gzip, deflate',
+        'Accept-Language': 'zh,zh-TW;q=0.9,en-US;q=0.8,en;q=0.7,zh-CN;q=0.6',
+        'Cache-Control': 'max-age=0',
+        'Connection': 'keep-alive',
+        'DNT': 1,
+        'Host': 'lishi.tianqi.com',
+        'Upgrade-Insecure-Requests': 1,
+        'Cookie': 'cityPy=zaozhuang; cityPy_expire=1547017400; UM_distinctid=1680d608af028a-0bb62dd0b72836-b781636-130980-1680d608af26d3; Hm_lvt_ab6a683aa97a52202eab5b3a9042a8d2=1546412552,1546412658,1546412960,1546479069; Hm_lpvt_ab6a683aa97a52202eab5b3a9042a8d2=1546479069',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
+    }
     data = []
     for each_time in time_list:
         url = url_main + each_time + '.html'
         # download = spyder.DownloaderSelf(user_agent=user_agent, cache=spyder.DiskCacheSelf(compress=False))
-        download = spyder.DownloaderSelf(user_agent=user_agent)
-        html = download.download(url=url, headers=header)
-        html = html['html'].decode('utf-8')
-        print(html)
-        break
+        # download = spyder.DownloaderSelf(user_agent=user_agent)
+        download = spyder.DownloaderSelf(headers=headers, cache=spyder.DiskCacheSelf(compress=False))
+        html = download(url=url).decode('gbk')
         print('开始解析' + each_time)
         weather = analysis.AnalysisHtml(html)
         weather_info = weather.analysis_weather()
